@@ -29,10 +29,7 @@ export default function ResourceLibrary() {
   }, []);
 
   const fetchResources = async () => {
-    const { data } = await supabase
-      .from('resources')
-      .select('*')
-      .order('title');
+    const { data } = await supabase.from('resources').select('*').order('title');
     setResources(data || []);
     setLoading(false);
   };
@@ -94,7 +91,7 @@ export default function ResourceLibrary() {
             <p className="text-gray-600 mt-3 text-lg">Free worksheets, guides & tools for mental health support</p>
           </div>
 
-          {/* Upload Section */}
+          {/* Improved Upload Section */}
           <div className="mb-10 bg-white p-8 rounded-3xl border border-dashed border-gray-300 text-center">
             <p className="font-medium text-gray-700 mb-2">Upload New Resource</p>
             <p className="text-sm text-gray-500 mb-4">PDF, images, or other files</p>
@@ -104,10 +101,10 @@ export default function ResourceLibrary() {
               disabled={uploading}
               className="block mx-auto text-sm file:mr-4 file:py-3 file:px-8 file:rounded-2xl file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
             />
-            {uploading && <p className="mt-3 text-blue-600">Uploading...</p>}
+            {uploading && <p className="mt-3 text-blue-600">Uploading file...</p>}
           </div>
 
-          {/* Search and Filter */}
+          {/* Search + Filter */}
           <div className="flex flex-col md:flex-row gap-4 mb-8">
             <input
               type="text"
@@ -153,10 +150,6 @@ export default function ResourceLibrary() {
                 </div>
               ))}
             </div>
-          )}
-
-          {filteredResources.length === 0 && !loading && (
-            <p className="text-center text-gray-500 py-12">No resources found. Try a different search or upload one above.</p>
           )}
         </div>
       </div>

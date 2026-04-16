@@ -78,15 +78,20 @@ export default function ProviderSearch() {
   const confirmBooking = (date: string, time: string, reason: string) => {
     if (!selectedProvider) return;
 
-    const booking = {
+    const newBooking = {
+      id: Date.now(),
       providerName: selectedProvider.full_name,
       date,
       time,
       reason,
-      status: 'confirmed'
+      status: 'Upcoming' as const
     };
 
-    setBookingDetails(booking);
+    // Save to localStorage (real data)
+    const existing = JSON.parse(localStorage.getItem('mySessions') || '[]');
+    localStorage.setItem('mySessions', JSON.stringify([...existing, newBooking]));
+
+    setBookingDetails(newBooking);
     setBookingConfirmed(true);
   };
 
@@ -175,10 +180,7 @@ export default function ProviderSearch() {
             </h2>
             <p className="text-gray-600 mb-6">{selectedProvider.location} • ${selectedProvider.hourly_rate}/hour</p>
 
-            <BookingForm 
-              onConfirm={(date, time, reason) => confirmBooking(date, time, reason)} 
-              onCancel={closeModal} 
-            />
+            <BookingForm onConfirm={confirmBooking} onCancel={closeModal} />
           </div>
         </div>
       )}
@@ -199,10 +201,7 @@ export default function ProviderSearch() {
               <p><strong>Reason:</strong> {bookingDetails.reason}</p>
             </div>
 
-            <button 
-              onClick={closeModal}
-              className="w-full bg-emerald-600 text-white py-4 rounded-3xl font-medium hover:bg-emerald-700"
-            >
+            <button onClick={closeModal} className="w-full bg-emerald-600 text-white py-4 rounded-3xl font-medium hover:bg-emerald-700">
               Done
             </button>
           </div>
@@ -212,7 +211,6 @@ export default function ProviderSearch() {
   );
 }
 
-// Booking Form Component
 function BookingForm({ onConfirm, onCancel }: { onConfirm: (date: string, time: string, reason: string) => void; onCancel: () => void }) {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -229,50 +227,24 @@ function BookingForm({ onConfirm, onCancel }: { onConfirm: (date: string, time: 
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Date</label>
-        <input 
-          type="date" 
-          value={date} 
-          onChange={(e) => setDate(e.target.value)} 
-          className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-gray-900" 
-          required 
-        />
+        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-gray-900" required />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Time</label>
-        <input 
-          type="time" 
-          value={time} 
-          onChange={(e) => setTime(e.target.value)} 
-          className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-gray-900" 
-          required 
-        />
+        <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-gray-900" required />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Reason for Session</label>
-        <textarea 
-          rows={4}
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          placeholder="Briefly describe what you'd like to discuss..."
-          className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-gray-900"
-          required
-        />
+        <textarea rows={4} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Briefly describe what you'd like to discuss..." className="w-full px-4 py-3 border border-gray-300 rounded-2xl text-gray-900" required />
       </div>
 
-      <div className="flex gap-4 pt-6">
-        <button 
-          type="button"
-          onClick={onCancel}
-          className="flex-1 py-4 border border-gray-400 text-gray-700 rounded-2xl font-medium hover:bg-gray-100"
-        >
+      <div className="flex gap-4 pt-4">
+        <button type="button" onClick={onCancel} className="flex-1 py-4 border border-gray-400 text-gray-700 rounded-2xl font-medium hover:bg-gray-100">
           Cancel
         </button>
-        <button 
-          type="submit"
-          className="flex-1 py-4 bg-emerald-600 text-white rounded-2xl font-medium hover:bg-emerald-700"
-        >
+        <button type="submit" className="flex-1 py-4 bg-emerald-600 text-white rounded-2xl font-medium hover:bg-emerald-700">
           Confirm Booking
         </button>
       </div>
