@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
 import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
@@ -31,7 +30,6 @@ export default function Dashboard() {
     return (
       <>
         <Navbar />
-        <Sidebar />
         <div className="ml-64 min-h-screen bg-gray-50 flex items-center justify-center">
           <p className="text-gray-500">Loading your dashboard...</p>
         </div>
@@ -42,7 +40,6 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <Sidebar />
       <div className="ml-64 min-h-screen bg-gray-50 py-10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="bg-white rounded-3xl shadow-xl p-10">
